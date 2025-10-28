@@ -1,0 +1,12 @@
+D:\CS66\Project\june-store\store-api\ClassLibrary\bin\Release\net9.0\ClassLibrary.deps.json
+D:\CS66\Project\june-store\store-api\ClassLibrary\bin\Release\net9.0\ClassLibrary.dll
+D:\CS66\Project\june-store\store-api\ClassLibrary\bin\Release\net9.0\ClassLibrary.pdb
+D:\CS66\Project\june-store\store-api\ClassLibrary\obj\Release\net9.0\ClassLibrary.csproj.AssemblyReference.cache
+D:\CS66\Project\june-store\store-api\ClassLibrary\obj\Release\net9.0\ClassLibrary.GeneratedMSBuildEditorConfig.editorconfig
+D:\CS66\Project\june-store\store-api\ClassLibrary\obj\Release\net9.0\ClassLibrary.AssemblyInfoInputs.cache
+D:\CS66\Project\june-store\store-api\ClassLibrary\obj\Release\net9.0\ClassLibrary.AssemblyInfo.cs
+D:\CS66\Project\june-store\store-api\ClassLibrary\obj\Release\net9.0\ClassLibrary.csproj.CoreCompileInputs.cache
+D:\CS66\Project\june-store\store-api\ClassLibrary\obj\Release\net9.0\ClassLibrary.dll
+D:\CS66\Project\june-store\store-api\ClassLibrary\obj\Release\net9.0\refint\ClassLibrary.dll
+D:\CS66\Project\june-store\store-api\ClassLibrary\obj\Release\net9.0\ClassLibrary.pdb
+D:\CS66\Project\june-store\store-api\ClassLibrary\obj\Release\net9.0\ref\ClassLibrary.dll
