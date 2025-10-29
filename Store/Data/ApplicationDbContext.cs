@@ -21,8 +21,6 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<Product> Products { get; set; }
 
-    public virtual DbSet<Address> Addresses { get; set; }
-
     public virtual DbSet<Order> Orders { get; set; }
 
     public virtual DbSet<OrderItem> OrderItems { get; set; }
@@ -40,6 +38,8 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<Otp> Otps { get; set; }
 
     public virtual DbSet<Location> Locations { get; set; }
+
+    public virtual DbSet<SellerRevenue> SellerRevenues { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -130,41 +130,15 @@ public partial class ApplicationDbContext : DbContext
                 .OnDelete(DeleteBehavior.Restrict);
         });
 
-        modelBuilder.Entity<Address>(entity =>
-        {
-            entity.HasKey(e => e.AddressId);
-
-            entity.HasIndex(e => e.UserId);
-
-            entity.Property(e => e.ReceiverName).IsRequired().HasMaxLength(100);
-            entity.Property(e => e.PhoneNumber).IsRequired().HasMaxLength(20);
-            entity.Property(e => e.AddressLine1).IsRequired().HasMaxLength(500);
-            entity.Property(e => e.AddressLine2).HasMaxLength(500);
-            entity.Property(e => e.District).IsRequired().HasMaxLength(100);
-            entity.Property(e => e.Subdistrict).IsRequired().HasMaxLength(100);
-            entity.Property(e => e.Province).IsRequired().HasMaxLength(100);
-            entity.Property(e => e.PostalCode).IsRequired().HasMaxLength(10);
-            entity.Property(e => e.IsDefault).HasDefaultValue(false);
-            entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETDATE()");
-            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("GETDATE()");
-
-            entity.HasOne(d => d.User)
-                .WithMany(p => p.Addresses)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
-        });
-
         modelBuilder.Entity<Order>(entity =>
         {
             entity.HasKey(e => e.OrderId);
 
             entity.HasIndex(e => e.UserId);
-            entity.HasIndex(e => e.AddressId);
             entity.HasIndex(e => e.OrderNumber).IsUnique();
 
             entity.Property(e => e.OrderNumber).IsRequired().HasMaxLength(50);
             entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 2)");
-            entity.Property(e => e.ShippingFee).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Status).HasMaxLength(50).HasDefaultValue("Pending");
             entity.Property(e => e.PaymentStatus).HasMaxLength(50).HasDefaultValue("Pending");
             entity.Property(e => e.Note).HasMaxLength(1000);
@@ -174,11 +148,6 @@ public partial class ApplicationDbContext : DbContext
             entity.HasOne(d => d.User)
                 .WithMany(p => p.Orders)
                 .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            entity.HasOne(d => d.Address)
-                .WithMany(p => p.Orders)
-                .HasForeignKey(d => d.AddressId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
 
@@ -347,6 +316,34 @@ public partial class ApplicationDbContext : DbContext
                 .WithMany(p => p.Locations)
                 .HasForeignKey(d => d.SellerId)
                 .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        modelBuilder.Entity<SellerRevenue>(entity =>
+        {
+            entity.HasKey(e => e.SellerRevenueId);
+
+            entity.HasIndex(e => e.OrderId);
+            entity.HasIndex(e => e.SellerId);
+            entity.HasIndex(e => new { e.OrderId, e.SellerId }).IsUnique();
+
+            entity.Property(e => e.GrossAmount).HasColumnType("decimal(18, 2)").IsRequired();
+            entity.Property(e => e.CommissionRate).HasColumnType("decimal(5, 2)").HasDefaultValue(0);
+            entity.Property(e => e.CommissionAmount).HasColumnType("decimal(18, 2)").HasDefaultValue(0);
+            entity.Property(e => e.NetAmount).HasColumnType("decimal(18, 2)").IsRequired();
+            entity.Property(e => e.Status).HasMaxLength(50).HasDefaultValue("Pending");
+            entity.Property(e => e.SettlementNote).HasMaxLength(1000);
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETDATE()");
+            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("GETDATE()");
+
+            entity.HasOne(d => d.Order)
+                .WithMany(p => p.SellerRevenues)
+                .HasForeignKey(d => d.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(d => d.Seller)
+                .WithMany(p => p.SellerRevenues)
+                .HasForeignKey(d => d.SellerId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         OnModelCreatingPartial(modelBuilder);

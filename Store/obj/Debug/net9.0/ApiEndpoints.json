@@ -1,110 +1,5 @@
 [
   {
-    "ContainingType": "Store.Controllers.AddressController",
-    "Method": "GetMyAddresses",
-    "RelativePath": "api/Address",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Store.Controllers.AddressController",
-    "Method": "Create",
-    "RelativePath": "api/Address",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "dto",
-        "Type": "ClassLibrary.Models.Dto.AddressCreateDTO",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Store.Controllers.AddressController",
-    "Method": "GetById",
-    "RelativePath": "api/Address/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Store.Controllers.AddressController",
-    "Method": "Update",
-    "RelativePath": "api/Address/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "dto",
-        "Type": "ClassLibrary.Models.Dto.AddressUpdateDTO",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Store.Controllers.AddressController",
-    "Method": "Delete",
-    "RelativePath": "api/Address/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Store.Controllers.AddressController",
-    "Method": "SetDefault",
-    "RelativePath": "api/Address/{id}/set-default",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Store.Controllers.AddressController",
-    "Method": "GetDefaultAddress",
-    "RelativePath": "api/Address/default",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
     "ContainingType": "Store.Controllers.AuthenController",
     "Method": "ChangePassword",
     "RelativePath": "api/Authen/change-password",
@@ -677,6 +572,16 @@
   },
   {
     "ContainingType": "Store.Controllers.OrderController",
+    "Method": "GetAllOrders",
+    "RelativePath": "api/Order/all",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Store.Controllers.OrderController",
     "Method": "GetBySeller",
     "RelativePath": "api/Order/seller/{sellerId}",
     "HttpMethod": "GET",
@@ -687,6 +592,22 @@
         "Name": "sellerId",
         "Type": "System.Int32",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Store.Controllers.PaymentController",
+    "Method": "GetQrCode",
+    "RelativePath": "api/Payment/qrcode",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "amount",
+        "Type": "System.Double",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

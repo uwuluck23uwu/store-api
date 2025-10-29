@@ -116,7 +116,6 @@ builder.Services.AddScoped<IAuthenService, Store.Services.AuthenService>();
 builder.Services.AddScoped<ICategoryService, Store.Services.CategoryService>();
 builder.Services.AddScoped<ISellerService, Store.Services.SellerService>();
 builder.Services.AddScoped<IProductService, Store.Services.ProductService>();
-builder.Services.AddScoped<IAddressService, Store.Services.AddressService>();
 builder.Services.AddScoped<ICartService, Store.Services.CartService>();
 builder.Services.AddScoped<IOrderService, Store.Services.OrderService>();
 builder.Services.AddScoped<IReviewService, Store.Services.ReviewService>();

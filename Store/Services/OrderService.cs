@@ -17,7 +17,6 @@ public class OrderService : Service<Order>, IServices.IOrderService
         try
         {
             var orders = await _db.Orders
-                .Include(o => o.Address)
                 .Include(o => o.OrderItems)
                     .ThenInclude(oi => oi.Product)
                 .Include(o => o.OrderItems)
@@ -52,7 +51,6 @@ public class OrderService : Service<Order>, IServices.IOrderService
         {
             var order = await _db.Orders
                 .Include(o => o.User)
-                .Include(o => o.Address)
                 .Include(o => o.OrderItems)
                     .ThenInclude(oi => oi.Product)
                         .ThenInclude(p => p.Category)
@@ -99,7 +97,6 @@ public class OrderService : Service<Order>, IServices.IOrderService
                 .Include(oi => oi.Order)
                     .ThenInclude(o => o.User)
                 .Include(oi => oi.Order)
-                    .ThenInclude(o => o.Address)
                 .Include(oi => oi.Product)
                 .Where(oi => oi.SellerId == sellerId)
                 .OrderByDescending(oi => oi.Order.CreatedAt)
@@ -125,23 +122,45 @@ public class OrderService : Service<Order>, IServices.IOrderService
         }
     }
 
+    public async Task<ResponseData> GetAllOrdersAsync()
+    {
+        try
+        {
+            var orders = await _db.Orders
+                .Include(o => o.User)
+                .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.Product)
+                .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.Seller)
+                .Include(o => o.Payment)
+                .OrderByDescending(o => o.CreatedAt)
+                .ToListAsync();
+
+            var orderDtos = _mapper.Map<List<OrderDetailDTO>>(orders);
+
+            return new ResponseData(
+                System.Net.HttpStatusCode.OK,
+                true,
+                "All orders retrieved successfully",
+                orderDtos
+            );
+        }
+        catch (Exception ex)
+        {
+            return new ResponseData(
+                System.Net.HttpStatusCode.InternalServerError,
+                false,
+                $"Error: {ex.Message}",
+                null
+            );
+        }
+    }
+
     public async Task<ResponseData> CreateAsync(int userId, OrderCreateDTO dto)
     {
         using var transaction = await _db.Database.BeginTransactionAsync();
         try
         {
-            // Validate address
-            var address = await _db.Addresses.FindAsync(dto.AddressId);
-            if (address == null || address.UserId != userId)
-            {
-                return new ResponseData(
-                System.Net.HttpStatusCode.BadRequest,
-                false,
-                "Invalid address",
-                null
-            );
-            }
-
             // Validate all products and check stock
             var productIds = dto.Items.Select(i => i.ProductId).ToList();
             var products = await _db.Products
@@ -202,9 +221,7 @@ public class OrderService : Service<Order>, IServices.IOrderService
             {
                 UserId = userId,
                 OrderNumber = orderNumber,
-                AddressId = dto.AddressId,
                 TotalAmount = totalPrice,
-                ShippingFee = dto.ShippingFee,
                 Status = "Pending",
                 Note = dto.Note,
                 OrderDate = DateTime.Now,
@@ -241,6 +258,51 @@ public class OrderService : Service<Order>, IServices.IOrderService
                 product.UpdatedAt = DateTime.Now;
             }
 
+            await _db.SaveChangesAsync();
+
+            // Create Payment record
+            var payment = new Payment
+            {
+                OrderId = order.OrderId,
+                Method = dto.PaymentMethod,
+                Amount = totalPrice,
+                Status = "Pending",
+                ReferenceCode = null,
+                PaidAt = null
+            };
+            await _db.Payments.AddAsync(payment);
+            await _db.SaveChangesAsync();
+
+            // Calculate and create SellerRevenue for each seller
+            var sellerGroups = dto.Items
+                .GroupBy(i => products[i.ProductId].SellerId)
+                .Select(g => new
+                {
+                    SellerId = g.Key,
+                    GrossAmount = g.Sum(i => (products[i.ProductId].Price ?? 0) * i.Quantity)
+                });
+
+            foreach (var sellerGroup in sellerGroups)
+            {
+                decimal commissionRate = 0; // Default: no commission (can be configured later)
+                decimal commissionAmount = sellerGroup.GrossAmount * (commissionRate / 100);
+                decimal netAmount = sellerGroup.GrossAmount - commissionAmount;
+
+                var sellerRevenue = new SellerRevenue
+                {
+                    OrderId = order.OrderId,
+                    SellerId = sellerGroup.SellerId,
+                    GrossAmount = sellerGroup.GrossAmount,
+                    CommissionRate = commissionRate,
+                    CommissionAmount = commissionAmount,
+                    NetAmount = netAmount,
+                    Status = "Pending",
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
+                };
+
+                await _db.SellerRevenues.AddAsync(sellerRevenue);
+            }
             await _db.SaveChangesAsync();
 
             // Clear cart items for ordered products

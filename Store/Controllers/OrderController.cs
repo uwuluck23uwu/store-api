@@ -56,6 +56,19 @@ public class OrderController : ControllerBase
             return NotFound(result);
     }
 
+    /// Get all orders (admin only)
+    [HttpGet("all")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> GetAllOrders()
+    {
+        var result = await _orderService.GetAllOrdersAsync();
+
+        if (result.TaskStatus)
+            return Ok(result);
+        else
+            return NotFound(result);
+    }
+
     /// Create new order
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] OrderCreateDTO dto)

@@ -6,9 +6,6 @@ namespace ClassLibrary.Models.Dto
 {
     public class OrderCreateDTO
     {
-        [Required(ErrorMessage = "Address ID is required")]
-        public int AddressId { get; set; }
-
         [Required(ErrorMessage = "Order items are required")]
         [MinLength(1, ErrorMessage = "Order must contain at least one item")]
         public List<OrderItemCreateDTO> Items { get; set; }
@@ -16,7 +13,9 @@ namespace ClassLibrary.Models.Dto
         [MaxLength(1000)]
         public string Note { get; set; }
 
-        public decimal ShippingFee { get; set; } = 0;
+        [Required(ErrorMessage = "Payment method is required")]
+        [MaxLength(50)]
+        public string PaymentMethod { get; set; }
     }
 
     // Alias for backward compatibility

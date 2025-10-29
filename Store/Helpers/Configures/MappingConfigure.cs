@@ -47,11 +47,6 @@ public class MappingConfigure : Profile
         CreateMap<ProductCreateDTO, Product>();
         CreateMap<ProductUpdateDTO, Product>();
 
-        // Address mappings
-        CreateMap<Address, AddressDTO>();
-        CreateMap<AddressCreateDTO, Address>();
-        CreateMap<AddressUpdateDTO, Address>();
-
         // Cart mappings
         CreateMap<Cart, CartItemDTO>()
             .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.ProductName))
@@ -71,14 +66,18 @@ public class MappingConfigure : Profile
 
         // Order mappings
         CreateMap<Order, OrderDTO>()
-            .ForMember(dest => dest.ItemCount, opt => opt.MapFrom(src => src.OrderItems.Sum(oi => oi.Quantity)));
+            .ForMember(dest => dest.ItemCount, opt => opt.MapFrom(src => src.OrderItems.Sum(oi => oi.Quantity)))
+            .ForMember(dest => dest.OrderItems, opt => opt.MapFrom(src => src.OrderItems));
         CreateMap<Order, OrderDetailDTO>()
-            .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
             .ForMember(dest => dest.OrderItems, opt => opt.MapFrom(src => src.OrderItems))
             .ForMember(dest => dest.Payment, opt => opt.MapFrom(src => src.Payment));
         CreateMap<OrderCreateDTO, Order>();
 
         // OrderItem mappings
+        CreateMap<OrderItem, OrderItemSummaryDTO>()
+            .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.ProductName))
+            .ForMember(dest => dest.ProductImageUrl, opt => opt.MapFrom(src => src.Product.ImageUrl))
+            .ForMember(dest => dest.Unit, opt => opt.MapFrom(src => src.Product.Unit));
         CreateMap<OrderItem, OrderItemDTO>()
             .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.ProductName))
             .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.Product.ImageUrl))

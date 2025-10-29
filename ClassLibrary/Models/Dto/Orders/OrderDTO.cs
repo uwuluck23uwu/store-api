@@ -10,13 +10,9 @@ namespace ClassLibrary.Models.Dto
 
         public int UserId { get; set; }
 
-        public int AddressId { get; set; }
-
         public string OrderNumber { get; set; }
 
         public decimal? TotalAmount { get; set; }
-
-        public decimal? ShippingFee { get; set; }
 
         public string Status { get; set; } // Pending, Confirmed, Preparing, Shipping, Delivered, Cancelled
 
@@ -29,5 +25,27 @@ namespace ClassLibrary.Models.Dto
         public DateTime? UpdatedAt { get; set; }
 
         public int ItemCount { get; set; }
+
+        // Order Items for list view
+        public List<OrderItemSummaryDTO> OrderItems { get; set; }
+    }
+
+    public class OrderItemSummaryDTO
+    {
+        public int OrderItemId { get; set; }
+
+        public int ProductId { get; set; }
+
+        public string ProductName { get; set; }
+
+        public string ProductImageUrl { get; set; }
+
+        public int? Quantity { get; set; }
+
+        public decimal? UnitPrice { get; set; }
+
+        public decimal? TotalPrice { get; set; }
+
+        public string Unit { get; set; }
     }
 }

@@ -10,13 +10,9 @@ public partial class Order
 
     public int UserId { get; set; }
 
-    public int AddressId { get; set; }
-
     public string OrderNumber { get; set; } = string.Empty; // ORD-YYYYMMDD-XXXX
 
     public decimal TotalAmount { get; set; }
-
-    public decimal ShippingFee { get; set; } = 0;
 
     public string Status { get; set; } = "Pending"; // Pending, Confirmed, Preparing, Shipping, Delivered, Cancelled
 
@@ -32,11 +28,11 @@ public partial class Order
 
     public virtual User User { get; set; }
 
-    public virtual Address Address { get; set; }
-
     public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 
     public virtual Payment Payment { get; set; }
 
     public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
+
+    public virtual ICollection<SellerRevenue> SellerRevenues { get; set; } = new List<SellerRevenue>();
 }

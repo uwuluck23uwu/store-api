@@ -11,6 +11,7 @@ wwwroot\images\logos\seller-1-logo-245170aa-684b-439f-9a4e-e33faac11957.jpg
 wwwroot\images\logos\seller-2-logo-12755777-079f-4bd5-ae0e-280f8a3de782.jpg
 wwwroot\images\products\261f35df-f2a7-4939-8f83-b6be3ba23156.png
 wwwroot\images\products\28a979a6-cf39-4191-ba48-d05b5ffb97ae.png
+wwwroot\images\products\6335fc43-a16f-4d4f-86f4-838cd87a7453.jpeg
 wwwroot\images\products\63ca9ede-cc9a-4bad-98d2-c852133064f7.png
 wwwroot\images\products\66e9bbe4-66d5-4e52-af3b-028b1ad4f3b0.png
 wwwroot\images\products\7c9ed359-e0fa-41e5-b066-fdb7334cce99.png

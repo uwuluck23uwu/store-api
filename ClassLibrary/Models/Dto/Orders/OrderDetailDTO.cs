@@ -14,8 +14,6 @@ namespace ClassLibrary.Models.Dto
 
         public decimal? TotalAmount { get; set; }
 
-        public decimal? ShippingFee { get; set; }
-
         public string Status { get; set; }
 
         public string PaymentStatus { get; set; }
@@ -32,9 +30,6 @@ namespace ClassLibrary.Models.Dto
         public string UserEmail { get; set; }
 
         public string UserPhone { get; set; }
-
-        // Address Info
-        public AddressDTO Address { get; set; }
 
         // Order Items
         public List<OrderItemDetailDTO> OrderItems { get; set; }

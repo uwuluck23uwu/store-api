@@ -45,4 +45,6 @@ public partial class Seller
     public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 
     public virtual ICollection<Location> Locations { get; set; } = new List<Location>();
+
+    public virtual ICollection<SellerRevenue> SellerRevenues { get; set; } = new List<SellerRevenue>();
 }

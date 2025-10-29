@@ -10,166 +10,6 @@
     "version": "v1"
   },
   "paths": {
-    "/api/Address": {
-      "get": {
-        "tags": [
-          "Address"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Address"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AddressCreateDTO"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AddressCreateDTO"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/AddressCreateDTO"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Address/{id}": {
-      "get": {
-        "tags": [
-          "Address"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "Address"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AddressUpdateDTO"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AddressUpdateDTO"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/AddressUpdateDTO"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Address"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Address/default": {
-      "get": {
-        "tags": [
-          "Address"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Address/{id}/set-default": {
-      "put": {
-        "tags": [
-          "Address"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/api/Authen/register": {
       "post": {
         "tags": [
@@ -1049,6 +889,18 @@
         }
       }
     },
+    "/api/Order/all": {
+      "get": {
+        "tags": [
+          "Order"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Order/{id}/status": {
       "put": {
         "tags": [
@@ -1104,6 +956,28 @@
             "schema": {
               "type": "integer",
               "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Payment/qrcode": {
+      "get": {
+        "tags": [
+          "Payment"
+        ],
+        "parameters": [
+          {
+            "name": "amount",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
             }
           }
         ],
@@ -1953,126 +1827,6 @@
         },
         "additionalProperties": false
       },
-      "AddressCreateDTO": {
-        "required": [
-          "addressLine1",
-          "district",
-          "phoneNumber",
-          "postalCode",
-          "province",
-          "receiverName",
-          "subdistrict"
-        ],
-        "type": "object",
-        "properties": {
-          "receiverName": {
-            "maxLength": 100,
-            "minLength": 1,
-            "type": "string"
-          },
-          "phoneNumber": {
-            "maxLength": 20,
-            "minLength": 1,
-            "type": "string",
-            "format": "tel"
-          },
-          "addressLine1": {
-            "maxLength": 500,
-            "minLength": 1,
-            "type": "string"
-          },
-          "addressLine2": {
-            "maxLength": 500,
-            "type": "string",
-            "nullable": true
-          },
-          "district": {
-            "maxLength": 100,
-            "minLength": 1,
-            "type": "string"
-          },
-          "subdistrict": {
-            "maxLength": 100,
-            "minLength": 1,
-            "type": "string"
-          },
-          "province": {
-            "maxLength": 100,
-            "minLength": 1,
-            "type": "string"
-          },
-          "postalCode": {
-            "maxLength": 10,
-            "minLength": 1,
-            "pattern": "^\\d{5}$",
-            "type": "string"
-          },
-          "isDefault": {
-            "type": "boolean"
-          }
-        },
-        "additionalProperties": false
-      },
-      "AddressUpdateDTO": {
-        "required": [
-          "addressLine1",
-          "district",
-          "phoneNumber",
-          "postalCode",
-          "province",
-          "receiverName",
-          "subdistrict"
-        ],
-        "type": "object",
-        "properties": {
-          "receiverName": {
-            "maxLength": 100,
-            "minLength": 1,
-            "type": "string"
-          },
-          "phoneNumber": {
-            "maxLength": 20,
-            "minLength": 1,
-            "type": "string",
-            "format": "tel"
-          },
-          "addressLine1": {
-            "maxLength": 500,
-            "minLength": 1,
-            "type": "string"
-          },
-          "addressLine2": {
-            "maxLength": 500,
-            "type": "string",
-            "nullable": true
-          },
-          "district": {
-            "maxLength": 100,
-            "minLength": 1,
-            "type": "string"
-          },
-          "subdistrict": {
-            "maxLength": 100,
-            "minLength": 1,
-            "type": "string"
-          },
-          "province": {
-            "maxLength": 100,
-            "minLength": 1,
-            "type": "string"
-          },
-          "postalCode": {
-            "maxLength": 10,
-            "minLength": 1,
-            "pattern": "^\\d{5}$",
-            "type": "string"
-          },
-          "isDefault": {
-            "type": "boolean"
-          }
-        },
-        "additionalProperties": false
-      },
       "ChangePasswordDTO": {
         "required": [
           "confirmPassword",
@@ -2290,15 +2044,11 @@
       },
       "OrderCreateDTO": {
         "required": [
-          "addressId",
-          "items"
+          "items",
+          "paymentMethod"
         ],
         "type": "object",
         "properties": {
-          "addressId": {
-            "type": "integer",
-            "format": "int32"
-          },
           "items": {
             "minItems": 1,
             "type": "array",
@@ -2311,9 +2061,10 @@
             "type": "string",
             "nullable": true
           },
-          "shippingFee": {
-            "type": "number",
-            "format": "double"
+          "paymentMethod": {
+            "maxLength": 50,
+            "minLength": 1,
+            "type": "string"
           }
         },
         "additionalProperties": false
