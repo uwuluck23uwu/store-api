@@ -5,6 +5,7 @@ wwwroot\images\categories\9ab5e410-be8f-418e-9243-0ec14f74b1cc.png
 wwwroot\images\categories\becb3858-9eef-41f5-8b95-9fe1ef6e32f6.png
 wwwroot\images\categories\c5b68e85-e1e2-4f27-9f66-ce6efdcb0b15.png
 wwwroot\images\location-images\location-10-fba8ff88-1a3b-422b-93a3-26d8f61f6beb.jpg
+wwwroot\images\location-images\location-13-fefd793d-5cd9-436f-a234-b494653115b3.jpg
 wwwroot\images\location-images\location-8-6c3923df-a700-4fac-a7a1-ee21e367ed79.jpg
 wwwroot\images\location-images\location-9-7838419d-2b5d-4683-8386-1e63e4032828.jpg
 wwwroot\images\logos\seller-1-logo-245170aa-684b-439f-9a4e-e33faac11957.jpg
