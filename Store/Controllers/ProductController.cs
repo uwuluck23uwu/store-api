@@ -23,9 +23,10 @@ public class ProductController : ControllerBase
         [FromQuery] int pageSize = 10,
         [FromQuery] string? search = null,
         [FromQuery] int? categoryId = null,
-        [FromQuery] int? sellerId = null)
+        [FromQuery] int? sellerId = null,
+        [FromQuery] bool? isActive = null)
     {
-        var result = await _productService.GetAllAsync(pageNumber, pageSize, search, categoryId, sellerId);
+        var result = await _productService.GetAllAsync(pageNumber, pageSize, search, categoryId, sellerId, isActive);
 
         if (result.TaskStatus)
             return Ok(result);
@@ -125,18 +126,46 @@ public class ProductController : ControllerBase
             return BadRequest(result);
     }
 
-    /// Delete product (Seller owner or Admin)
+    /// Delete product (Seller owner or Admin) - Soft delete by setting IsActive = false
     [HttpDelete("{id}")]
     [Authorize(Roles = "Seller,Admin")]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(int id, [FromQuery] bool hardDelete = false)
     {
         int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
 
-        var result = await _productService.DeleteAsync(id, userId);
+        var result = await _productService.DeleteAsync(id, userId, hardDelete);
+
+        if (result.TaskStatus)
+            return Ok(result);
+        else
+            return BadRequest(result);
+    }
+
+    /// Check product usage - see if product can be hard deleted
+    [HttpGet("{id}/usage")]
+    [Authorize(Roles = "Seller,Admin")]
+    public async Task<IActionResult> CheckUsage(int id)
+    {
+        var result = await _productService.CheckProductUsageAsync(id);
 
         if (result.TaskStatus)
             return Ok(result);
         else
             return NotFound(result);
+    }
+
+    /// Toggle product active status (Seller owner or Admin)
+    [HttpPatch("{id}/toggle-status")]
+    [Authorize(Roles = "Seller,Admin")]
+    public async Task<IActionResult> ToggleStatus(int id)
+    {
+        int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+
+        var result = await _productService.ToggleActiveStatusAsync(id, userId);
+
+        if (result.TaskStatus)
+            return Ok(result);
+        else
+            return BadRequest(result);
     }
 }

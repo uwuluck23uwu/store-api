@@ -1,5 +1,7 @@
 #nullable disable
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ClassLibrary.Models.Dto
 {
@@ -37,5 +39,13 @@ namespace ClassLibrary.Models.Dto
         public string CategoryName { get; set; }
 
         public string SellerName { get; set; }
+
+        // Product images
+        public List<ProductImageDTO> ProductImages { get; set; }
+
+        // Helper property to get first image or default ImageUrl
+        public string PrimaryImageUrl => ProductImages?.FirstOrDefault(img => img.IsPrimary)?.ImageUrl
+                                         ?? ProductImages?.FirstOrDefault()?.ImageUrl
+                                         ?? ImageUrl;
     }
 }

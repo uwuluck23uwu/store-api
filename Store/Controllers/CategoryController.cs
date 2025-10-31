@@ -95,4 +95,17 @@ public class CategoryController : ControllerBase
         else
             return NotFound(result);
     }
+
+    /// Toggle category active status (Admin only)
+    [HttpPatch("{id}/toggle-status")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> ToggleStatus(int id)
+    {
+        var result = await _categoryService.ToggleActiveStatusAsync(id);
+
+        if (result.TaskStatus)
+            return Ok(result);
+        else
+            return BadRequest(result);
+    }
 }

@@ -10,5 +10,6 @@ namespace Store.Services.IServices
         Task<ResponseMessage> UpdateAsync(int id, CategoryUpdateDTO dto);
         Task<ResponseMessage> DeleteAsync(int id);
         Task<ResponseData> GetActiveCategoriesAsync();
+        Task<ResponseMessage> ToggleActiveStatusAsync(int id);
     }
 }

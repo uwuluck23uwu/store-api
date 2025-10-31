@@ -27,7 +27,7 @@ namespace Store.Services
                 }
 
                 // Validate file type
-                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
                 var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
 
                 if (!allowedExtensions.Contains(extension))
@@ -35,7 +35,7 @@ namespace Store.Services
                     return new ResponseData(
                         HttpStatusCode.BadRequest,
                         false,
-                        "Invalid file type. Only JPG, PNG, and GIF are allowed",
+                        "Invalid file type. Only JPG, JPEG, PNG, GIF, WEBP are allowed",
                         null
                     );
                 }

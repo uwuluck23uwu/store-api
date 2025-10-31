@@ -21,7 +21,7 @@ public class CartService : Service<Cart>, IServices.ICartService
                     .ThenInclude(p => p.Seller)
                 .Include(c => c.Product)
                     .ThenInclude(p => p.Category)
-                .Where(c => c.UserId == userId)
+                .Where(c => c.UserId == userId && c.Product.IsActive == true)
                 .OrderByDescending(c => c.CreatedAt)
                 .ToListAsync();
 
@@ -58,7 +58,8 @@ public class CartService : Service<Cart>, IServices.ICartService
         try
         {
             var count = await _db.Carts
-                .Where(c => c.UserId == userId)
+                .Include(c => c.Product)
+                .Where(c => c.UserId == userId && c.Product.IsActive == true)
                 .SumAsync(c => c.Quantity);
 
             return count;

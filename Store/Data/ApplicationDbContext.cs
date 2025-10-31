@@ -31,7 +31,7 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<Cart> Carts { get; set; }
 
-    public virtual DbSet<Image> Images { get; set; }
+    // Legacy Images table removed; use ProductImages instead
 
     public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
 
@@ -40,6 +40,10 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<Location> Locations { get; set; }
 
     public virtual DbSet<SellerRevenue> SellerRevenues { get; set; }
+
+    public virtual DbSet<ProductImage> ProductImages { get; set; }
+
+    public virtual DbSet<AppBanner> AppBanners { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -246,14 +250,7 @@ public partial class ApplicationDbContext : DbContext
                 .OnDelete(DeleteBehavior.Restrict);
         });
 
-        modelBuilder.Entity<Image>(entity =>
-        {
-            entity.HasKey(e => e.ImageId);
-
-            entity.Property(e => e.RefId).HasMaxLength(50);
-            entity.Property(e => e.ImageUrl).HasMaxLength(500);
-            entity.Property(e => e.UploadedDate).HasDefaultValueSql("GETDATE()");
-        });
+        // Legacy Images entity removed
 
         modelBuilder.Entity<RefreshToken>(entity =>
         {
@@ -344,6 +341,36 @@ public partial class ApplicationDbContext : DbContext
                 .WithMany(p => p.SellerRevenues)
                 .HasForeignKey(d => d.SellerId)
                 .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<ProductImage>(entity =>
+        {
+            entity.HasKey(e => e.ProductImageId);
+
+            entity.HasIndex(e => e.ProductId);
+
+            entity.Property(e => e.ImageUrl).IsRequired().HasMaxLength(500);
+            entity.Property(e => e.DisplayOrder).HasDefaultValue(0);
+            entity.Property(e => e.IsPrimary).HasDefaultValue(false);
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETDATE()");
+
+            entity.HasOne(d => d.Product)
+                .WithMany(p => p.ProductImages)
+                .HasForeignKey(d => d.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<AppBanner>(entity =>
+        {
+            entity.HasKey(e => e.AppBannerId);
+
+            entity.Property(e => e.Title).HasMaxLength(200);
+            entity.Property(e => e.ImageUrl).IsRequired().HasMaxLength(500);
+            entity.Property(e => e.LinkUrl).HasMaxLength(500);
+            entity.Property(e => e.DisplayOrder).HasDefaultValue(0);
+            entity.Property(e => e.IsActive).HasDefaultValue(true);
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETDATE()");
+            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("GETDATE()");
         });
 
         OnModelCreatingPartial(modelBuilder);

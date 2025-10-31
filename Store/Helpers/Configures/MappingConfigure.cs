@@ -36,7 +36,8 @@ public class MappingConfigure : Profile
         // Product mappings
         CreateMap<Product, ProductDTO>()
             .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.CategoryName))
-            .ForMember(dest => dest.SellerName, opt => opt.MapFrom(src => src.Seller.ShopName));
+            .ForMember(dest => dest.SellerName, opt => opt.MapFrom(src => src.Seller.ShopName))
+            .ForMember(dest => dest.ProductImages, opt => opt.MapFrom(src => src.ProductImages));
         CreateMap<Product, ProductListDTO>()
             .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category != null ? src.Category.CategoryName : ""))
             .ForMember(dest => dest.ShopName, opt => opt.MapFrom(src => src.Seller != null ? src.Seller.ShopName : ""));
@@ -46,6 +47,14 @@ public class MappingConfigure : Profile
             .ForMember(dest => dest.Reviews, opt => opt.MapFrom(src => src.Reviews));
         CreateMap<ProductCreateDTO, Product>();
         CreateMap<ProductUpdateDTO, Product>();
+
+        // ProductImage mappings
+        CreateMap<ProductImage, ProductImageDTO>();
+
+        // AppBanner mappings
+        CreateMap<AppBanner, AppBannerDTO>();
+        CreateMap<AppBannerCreateDTO, AppBanner>();
+        CreateMap<AppBannerUpdateDTO, AppBanner>();
 
         // Cart mappings
         CreateMap<Cart, CartItemDTO>()
@@ -101,8 +110,7 @@ public class MappingConfigure : Profile
         CreateMap<Payment, PaymentDTO>();
         CreateMap<PaymentCreateDTO, Payment>();
 
-        // Image mappings
-        CreateMap<Image, ImageDTO>();
+        // Legacy Image mappings removed; use ProductImage instead
 
         // Location mappings
         CreateMap<Location, LocationDTO>()

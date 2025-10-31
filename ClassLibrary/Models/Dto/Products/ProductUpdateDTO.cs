@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 
@@ -22,7 +23,14 @@ namespace ClassLibrary.Models.Dto
         [MaxLength(50)]
         public string? Unit { get; set; }
 
+        // For backward compatibility - single image
         public IFormFile? Image { get; set; }
+
+        // Multiple images support
+        public List<IFormFile>? Images { get; set; }
+
+        // Image IDs to delete
+        public List<int>? DeleteImageIds { get; set; }
 
         public bool? IsActive { get; set; }
     }

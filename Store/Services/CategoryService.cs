@@ -19,8 +19,8 @@ public class CategoryService : Service<Category>, IServices.ICategoryService
     {
         try
         {
+            // Get all categories (both active and inactive) for admin management
             var categories = await _db.Categories
-                .Where(c => c.IsActive)
                 .OrderBy(c => c.CategoryName)
                 .ToListAsync();
 
@@ -282,6 +282,68 @@ public class CategoryService : Service<Category>, IServices.ICategoryService
                 false,
                 $"Error: {ex.Message}",
                 null
+            );
+        }
+    }
+
+    public async Task<ResponseMessage> ToggleActiveStatusAsync(int id)
+    {
+        try
+        {
+            var category = await _db.Categories.FindAsync(id);
+
+            if (category == null)
+            {
+                return new ResponseMessage(
+                    System.Net.HttpStatusCode.NotFound,
+                    false,
+                    "Category not found"
+                );
+            }
+
+            // Check if category has active products
+            var hasActiveProducts = await _db.Products
+                .AnyAsync(p => p.CategoryId == id && p.IsActive);
+
+            if (hasActiveProducts)
+            {
+                // Has active products - only toggle status (soft delete)
+                category.IsActive = !category.IsActive;
+                category.UpdatedAt = DateTime.Now;
+
+                await _db.SaveChangesAsync();
+
+                return new ResponseMessage(
+                    System.Net.HttpStatusCode.OK,
+                    true,
+                    $"Category {(category.IsActive ? "enabled" : "disabled")} successfully"
+                );
+            }
+            else
+            {
+                // No active products - hard delete
+                // Delete image if exists
+                if (!string.IsNullOrEmpty(category.ImageUrl))
+                {
+                    await _imageService.DeleteImageAsync(category.ImageUrl);
+                }
+
+                _db.Categories.Remove(category);
+                await _db.SaveChangesAsync();
+
+                return new ResponseMessage(
+                    System.Net.HttpStatusCode.OK,
+                    true,
+                    "Category deleted successfully"
+                );
+            }
+        }
+        catch (Exception ex)
+        {
+            return new ResponseMessage(
+                System.Net.HttpStatusCode.InternalServerError,
+                false,
+                $"Error: {ex.Message}"
             );
         }
     }

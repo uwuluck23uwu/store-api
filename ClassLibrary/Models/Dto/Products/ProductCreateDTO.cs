@@ -1,4 +1,5 @@
 #nullable disable
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 
@@ -29,7 +30,11 @@ namespace ClassLibrary.Models.Dto
         [MaxLength(50)]
         public string Unit { get; set; } = "ชิ้น";
 
+        // For backward compatibility - single image
         public IFormFile Image { get; set; }
+
+        // Multiple images support
+        public List<IFormFile> Images { get; set; }
 
         public bool IsActive { get; set; } = true;
     }

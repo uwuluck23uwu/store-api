@@ -15,15 +15,22 @@ public class ProductService : Service<Product>, IServices.IProductService
         _imageService = imageService;
     }
 
-    public async Task<ResponseData> GetAllAsync(int pageNumber, int pageSize, string? search, int? categoryId, int? sellerId)
+    public async Task<ResponseData> GetAllAsync(int pageNumber, int pageSize, string? search, int? categoryId, int? sellerId, bool? isActive = null)
     {
         try
         {
             var query = _db.Products
                 .Include(p => p.Category)
                 .Include(p => p.Seller)
-                .Where(p => p.IsActive)
+                .Include(p => p.ProductImages)
                 .AsQueryable();
+
+            // Apply IsActive filter
+            if (isActive.HasValue)
+            {
+                query = query.Where(p => p.IsActive == isActive.Value);
+            }
+            // If isActive is not specified, show all products (no filter)
 
             // Apply filters
             if (!string.IsNullOrEmpty(search))
@@ -89,6 +96,7 @@ public class ProductService : Service<Product>, IServices.IProductService
                     .ThenInclude(s => s.User)
                 .Include(p => p.Reviews)
                     .ThenInclude(r => r.User)
+                .Include(p => p.ProductImages)
                 .FirstOrDefaultAsync(p => p.ProductId == id);
 
             if (product == null)
@@ -128,6 +136,7 @@ public class ProductService : Service<Product>, IServices.IProductService
             var products = await _db.Products
                 .Include(p => p.Category)
                 .Include(p => p.Seller)
+                .Include(p => p.ProductImages)
                 .Where(p => p.CategoryId == categoryId && p.IsActive)
                 .OrderByDescending(p => p.CreatedAt)
                 .ToListAsync();
@@ -159,6 +168,7 @@ public class ProductService : Service<Product>, IServices.IProductService
             var products = await _db.Products
                 .Include(p => p.Category)
                 .Include(p => p.Seller)
+                .Include(p => p.ProductImages)
                 .Where(p => p.SellerId == sellerId && p.IsActive)
                 .OrderByDescending(p => p.CreatedAt)
                 .ToListAsync();
@@ -190,6 +200,7 @@ public class ProductService : Service<Product>, IServices.IProductService
             var products = await _db.Products
                 .Include(p => p.Category)
                 .Include(p => p.Seller)
+                .Include(p => p.ProductImages)
                 .Where(p => (p.ProductName.Contains(keyword) || p.Description.Contains(keyword)) && p.IsActive)
                 .OrderByDescending(p => p.CreatedAt)
                 .ToListAsync();
@@ -272,23 +283,57 @@ public class ProductService : Service<Product>, IServices.IProductService
             // Create product
             var product = _mapper.Map<Product>(dto);
             product.SellerId = seller.SellerId;
-
-            // Upload image if provided
-            if (dto.Image != null)
-            {
-                var uploadResult = await _imageService.UploadImageAsync(dto.Image, "products");
-                if (uploadResult.TaskStatus && uploadResult.Data != null)
-                {
-                    var imageData = uploadResult.Data as dynamic;
-                    product.ImageUrl = imageData?.ImageUrl;
-                }
-            }
             product.Rating = 0;
             product.CreatedAt = DateTime.Now;
             product.UpdatedAt = DateTime.Now;
 
             await _db.Products.AddAsync(product);
             await _db.SaveChangesAsync();
+
+            // Upload images
+            var imagesToUpload = new List<IFormFile>();
+
+            // Support both single image (backward compatibility) and multiple images
+            if (dto.Image != null)
+            {
+                imagesToUpload.Add(dto.Image);
+            }
+
+            if (dto.Images != null && dto.Images.Any())
+            {
+                imagesToUpload.AddRange(dto.Images);
+            }
+
+            // Upload all images and create ProductImage records
+            if (imagesToUpload.Any())
+            {
+                for (int i = 0; i < imagesToUpload.Count; i++)
+                {
+                    var uploadResult = await _imageService.UploadImageAsync(imagesToUpload[i], "products");
+                    if (uploadResult.TaskStatus && uploadResult.Data != null)
+                    {
+                        var imageData = uploadResult.Data as dynamic;
+                        var productImage = new ProductImage
+                        {
+                            ProductId = product.ProductId,
+                            ImageUrl = imageData?.ImageUrl,
+                            DisplayOrder = i,
+                            IsPrimary = i == 0, // First image is primary
+                            CreatedAt = DateTime.Now
+                        };
+
+                        await _db.ProductImages.AddAsync(productImage);
+
+                        // Set ImageUrl for backward compatibility (use first image)
+                        if (i == 0)
+                        {
+                            product.ImageUrl = imageData?.ImageUrl;
+                        }
+                    }
+                }
+
+                await _db.SaveChangesAsync();
+            }
 
             return new ResponseMessage(
                 System.Net.HttpStatusCode.OK,
@@ -351,20 +396,93 @@ public class ProductService : Service<Product>, IServices.IProductService
                 }
             }
 
-            // Upload new image if provided
-            if (dto.Image != null)
+            // Handle image deletion
+            if (dto.DeleteImageIds != null && dto.DeleteImageIds.Any())
             {
-                // Delete old image if exists
-                if (!string.IsNullOrEmpty(product.ImageUrl))
+                var imagesToDelete = await _db.ProductImages
+                    .Where(img => dto.DeleteImageIds.Contains(img.ProductImageId) && img.ProductId == id)
+                    .ToListAsync();
+
+                foreach (var img in imagesToDelete)
                 {
-                    await _imageService.DeleteImageAsync(product.ImageUrl);
+                    // Delete from filesystem
+                    await _imageService.DeleteImageAsync(img.ImageUrl);
+                    // Delete from database
+                    _db.ProductImages.Remove(img);
                 }
 
-                var uploadResult = await _imageService.UploadImageAsync(dto.Image, "products");
-                if (uploadResult.TaskStatus && uploadResult.Data != null)
+                await _db.SaveChangesAsync();
+            }
+
+            // Handle new image uploads
+            var imagesToUpload = new List<IFormFile>();
+
+            // Support both single image (backward compatibility) and multiple images
+            if (dto.Image != null)
+            {
+                imagesToUpload.Add(dto.Image);
+            }
+
+            if (dto.Images != null && dto.Images.Any())
+            {
+                imagesToUpload.AddRange(dto.Images);
+            }
+
+            // Upload new images
+            if (imagesToUpload.Any())
+            {
+                // Get current max display order
+                var existingImages = await _db.ProductImages
+                    .Where(img => img.ProductId == id)
+                    .ToListAsync();
+
+                var maxDisplayOrder = existingImages.Any()
+                    ? existingImages.Max(img => img.DisplayOrder)
+                    : -1;
+
+                for (int i = 0; i < imagesToUpload.Count; i++)
                 {
-                    var imageData = uploadResult.Data as dynamic;
-                    product.ImageUrl = imageData?.ImageUrl;
+                    var uploadResult = await _imageService.UploadImageAsync(imagesToUpload[i], "products");
+                    if (uploadResult.TaskStatus && uploadResult.Data != null)
+                    {
+                        var imageData = uploadResult.Data as dynamic;
+
+                        // Check if this is the first image
+                        var isFirstImage = !await _db.ProductImages.AnyAsync(img => img.ProductId == id);
+
+                        var productImage = new ProductImage
+                        {
+                            ProductId = id,
+                            ImageUrl = imageData?.ImageUrl,
+                            DisplayOrder = maxDisplayOrder + 1 + i,
+                            IsPrimary = isFirstImage, // Only first image is primary
+                            CreatedAt = DateTime.Now
+                        };
+
+                        await _db.ProductImages.AddAsync(productImage);
+
+                        // Update product ImageUrl for backward compatibility (use first image)
+                        if (isFirstImage)
+                        {
+                            product.ImageUrl = imageData?.ImageUrl;
+                        }
+                    }
+                }
+
+                await _db.SaveChangesAsync();
+            }
+
+            // Update primary image URL if needed
+            if (string.IsNullOrEmpty(product.ImageUrl))
+            {
+                var primaryImage = await _db.ProductImages
+                    .Where(img => img.ProductId == id)
+                    .OrderBy(img => img.DisplayOrder)
+                    .FirstOrDefaultAsync();
+
+                if (primaryImage != null)
+                {
+                    product.ImageUrl = primaryImage.ImageUrl;
                 }
             }
 
@@ -408,12 +526,16 @@ public class ProductService : Service<Product>, IServices.IProductService
         }
     }
 
-    public async Task<ResponseMessage> DeleteAsync(int id, int userId)
+    public async Task<ResponseMessage> DeleteAsync(int id, int userId, bool hardDelete = false)
     {
         try
         {
             var product = await _db.Products
                 .Include(p => p.Seller)
+                .Include(p => p.OrderItems)
+                .Include(p => p.ProductImages)
+                .Include(p => p.Carts)
+                .Include(p => p.Reviews)
                 .FirstOrDefaultAsync(p => p.ProductId == id);
 
             if (product == null)
@@ -439,45 +561,74 @@ public class ProductService : Service<Product>, IServices.IProductService
                 }
             }
 
-            // Check if product has orders
-            var hasOrders = await _db.OrderItems.AnyAsync(oi => oi.ProductId == id);
-            if (hasOrders)
+            // Check if product is used in orders
+            bool hasOrders = product.OrderItems.Any();
+
+            if (hardDelete)
             {
+                // Hard delete: Actually remove from database
+                // But only if no orders reference this product
+                if (hasOrders)
+                {
+                    return new ResponseMessage(
+                        System.Net.HttpStatusCode.BadRequest,
+                        false,
+                        "Cannot permanently delete product that has been ordered. Use soft delete instead."
+                    );
+                }
+
+                // Delete related data first
+                if (product.ProductImages.Any())
+                {
+                    foreach (var image in product.ProductImages.ToList())
+                    {
+                        await _imageService.DeleteImageAsync(image.ImageUrl);
+                        _db.ProductImages.Remove(image);
+                    }
+                }
+
+                if (product.Carts.Any())
+                {
+                    _db.Carts.RemoveRange(product.Carts);
+                }
+
+                if (product.Reviews.Any())
+                {
+                    _db.Reviews.RemoveRange(product.Reviews);
+                }
+
+                // Delete main image if exists
+                if (!string.IsNullOrEmpty(product.ImageUrl))
+                {
+                    await _imageService.DeleteImageAsync(product.ImageUrl);
+                }
+
+                // Delete the product
+                _db.Products.Remove(product);
+                await _db.SaveChangesAsync();
+
                 return new ResponseMessage(
-                System.Net.HttpStatusCode.BadRequest,
-                false,
-                "Cannot delete product with existing orders"
-            );
+                    System.Net.HttpStatusCode.OK,
+                    true,
+                    "Product permanently deleted successfully"
+                );
             }
-
-            // Check if product is in any carts - remove them
-            var cartItems = await _db.Carts.Where(c => c.ProductId == id).ToListAsync();
-            if (cartItems.Any())
+            else
             {
-                _db.Carts.RemoveRange(cartItems);
+                // Soft delete: Set IsActive to false
+                product.IsActive = false;
+                product.UpdatedAt = DateTime.Now;
+
+                await _db.SaveChangesAsync();
+
+                return new ResponseMessage(
+                    System.Net.HttpStatusCode.OK,
+                    true,
+                    hasOrders
+                        ? "Product disabled successfully (has order history)"
+                        : "Product disabled successfully"
+                );
             }
-
-            // Check if product has reviews - remove them
-            var reviews = await _db.Reviews.Where(r => r.ProductId == id).ToListAsync();
-            if (reviews.Any())
-            {
-                _db.Reviews.RemoveRange(reviews);
-            }
-
-            // Delete image if exists
-            if (!string.IsNullOrEmpty(product.ImageUrl))
-            {
-                await _imageService.DeleteImageAsync(product.ImageUrl);
-            }
-
-            _db.Products.Remove(product);
-            await _db.SaveChangesAsync();
-
-            return new ResponseMessage(
-                System.Net.HttpStatusCode.OK,
-                true,
-                "Product deleted successfully"
-            );
         }
         catch (Exception ex)
         {
@@ -540,6 +691,110 @@ public class ProductService : Service<Product>, IServices.IProductService
         catch (Exception)
         {
             return false;
+        }
+    }
+
+    public async Task<ResponseMessage> ToggleActiveStatusAsync(int productId, int userId)
+    {
+        try
+        {
+            var product = await _db.Products
+                .Include(p => p.Seller)
+                .FirstOrDefaultAsync(p => p.ProductId == productId);
+
+            if (product == null)
+            {
+                return new ResponseMessage(
+                    System.Net.HttpStatusCode.NotFound,
+                    false,
+                    "Product not found"
+                );
+            }
+
+            // Check ownership or admin
+            if (product.Seller.UserId != userId)
+            {
+                var user = await _db.Users.FindAsync(userId);
+                if (user?.Role != "Admin")
+                {
+                    return new ResponseMessage(
+                        System.Net.HttpStatusCode.Forbidden,
+                        false,
+                        "You don't have permission to modify this product"
+                    );
+                }
+            }
+
+            // Toggle IsActive status
+            product.IsActive = !product.IsActive;
+            product.UpdatedAt = DateTime.Now;
+
+            await _db.SaveChangesAsync();
+
+            return new ResponseMessage(
+                System.Net.HttpStatusCode.OK,
+                true,
+                $"Product {(product.IsActive ? "enabled" : "disabled")} successfully"
+            );
+        }
+        catch (Exception ex)
+        {
+            return new ResponseMessage(
+                System.Net.HttpStatusCode.InternalServerError,
+                false,
+                $"Error: {ex.Message}"
+            );
+        }
+    }
+
+    public async Task<ResponseData> CheckProductUsageAsync(int productId)
+    {
+        try
+        {
+            var product = await _db.Products
+                .Include(p => p.OrderItems)
+                .Include(p => p.Carts)
+                .Include(p => p.Reviews)
+                .FirstOrDefaultAsync(p => p.ProductId == productId);
+
+            if (product == null)
+            {
+                return new ResponseData(
+                    System.Net.HttpStatusCode.NotFound,
+                    false,
+                    "Product not found",
+                    null
+                );
+            }
+
+            var usageInfo = new
+            {
+                ProductId = productId,
+                HasOrders = product.OrderItems.Any(),
+                OrderCount = product.OrderItems.Count,
+                InCartsCount = product.Carts.Count,
+                ReviewCount = product.Reviews.Count,
+                CanHardDelete = !product.OrderItems.Any(),
+                RecommendedAction = product.OrderItems.Any()
+                    ? "Soft delete recommended - product has order history"
+                    : "Can be permanently deleted"
+            };
+
+            return new ResponseData(
+                System.Net.HttpStatusCode.OK,
+                true,
+                "Product usage retrieved successfully",
+                usageInfo
+            );
+        }
+        catch (Exception ex)
+        {
+            return new ResponseData(
+                System.Net.HttpStatusCode.InternalServerError,
+                false,
+                $"Error: {ex.Message}",
+                null
+            );
         }
     }
 }
