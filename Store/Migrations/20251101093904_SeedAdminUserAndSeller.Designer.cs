@@ -12,8 +12,8 @@ using Store.Data;
 namespace Store.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251017130831_UpdateUserSchemaFields")]
-    partial class UpdateUserSchemaFields
+    [Migration("20251101093904_SeedAdminUserAndSeller")]
+    partial class SeedAdminUserAndSeller
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,76 +25,50 @@ namespace Store.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ClassLibrary.Models.Data.Address", b =>
+            modelBuilder.Entity("ClassLibrary.Models.Data.AppBanner", b =>
                 {
-                    b.Property<int>("AddressId")
+                    b.Property<int>("AppBannerId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AddressId"));
-
-                    b.Property<string>("AddressLine1")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("AddressLine2")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AppBannerId"));
 
                     b.Property<DateTime?>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETDATE()");
 
-                    b.Property<string>("District")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<int>("DisplayOrder")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
-                    b.Property<bool?>("IsDefault")
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(true);
 
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                    b.Property<string>("LinkUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
-                    b.Property<string>("PostalCode")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
-
-                    b.Property<string>("Province")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("ReceiverName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Subdistrict")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<string>("Title")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETDATE()");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.HasKey("AppBannerId");
 
-                    b.HasKey("AddressId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Addresses");
+                    b.ToTable("AppBanners");
                 });
 
             modelBuilder.Entity("ClassLibrary.Models.Data.Cart", b =>
@@ -174,32 +148,6 @@ namespace Store.Migrations
                     b.HasKey("CategoryId");
 
                     b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("ClassLibrary.Models.Data.Image", b =>
-                {
-                    b.Property<int>("ImageId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ImageId"));
-
-                    b.Property<string>("ImageUrl")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("RefId")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime?>("UploadedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
-
-                    b.HasKey("ImageId");
-
-                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("ClassLibrary.Models.Data.Location", b =>
@@ -296,9 +244,6 @@ namespace Store.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
 
-                    b.Property<int>("AddressId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -322,9 +267,6 @@ namespace Store.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasDefaultValue("Pending");
 
-                    b.Property<decimal>("ShippingFee")
-                        .HasColumnType("decimal(18, 2)");
-
                     b.Property<string>("Status")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(50)
@@ -343,8 +285,6 @@ namespace Store.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("OrderId");
-
-                    b.HasIndex("AddressId");
 
                     b.HasIndex("OrderNumber")
                         .IsUnique();
@@ -599,6 +539,44 @@ namespace Store.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("ClassLibrary.Models.Data.ProductImage", b =>
+                {
+                    b.Property<int>("ProductImageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductImageId"));
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<int>("DisplayOrder")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("IsPrimary")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductImageId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductImages");
+                });
+
             modelBuilder.Entity("ClassLibrary.Models.Data.RefreshToken", b =>
                 {
                     b.Property<int>("RefreshTokenId")
@@ -665,7 +643,7 @@ namespace Store.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<int>("OrderId")
+                    b.Property<int?>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<int>("ProductId")
@@ -730,6 +708,9 @@ namespace Store.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<string>("QrCodeUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal?>("Rating")
                         .HasColumnType("decimal(3, 2)");
 
@@ -765,6 +746,71 @@ namespace Store.Migrations
                         .IsUnique();
 
                     b.ToTable("Sellers");
+                });
+
+            modelBuilder.Entity("ClassLibrary.Models.Data.SellerRevenue", b =>
+                {
+                    b.Property<int>("SellerRevenueId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SellerRevenueId"));
+
+                    b.Property<decimal>("CommissionAmount")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18, 2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<decimal>("CommissionRate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(5, 2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<decimal>("GrossAmount")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("NetAmount")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SellerId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("SettledAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SettlementNote")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasDefaultValue("Pending");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.HasKey("SellerRevenueId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("SellerId");
+
+                    b.HasIndex("OrderId", "SellerId")
+                        .IsUnique();
+
+                    b.ToTable("SellerRevenues");
                 });
 
             modelBuilder.Entity("ClassLibrary.Models.Data.User", b =>
@@ -842,17 +888,6 @@ namespace Store.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ClassLibrary.Models.Data.Address", b =>
-                {
-                    b.HasOne("ClassLibrary.Models.Data.User", "User")
-                        .WithMany("Addresses")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("ClassLibrary.Models.Data.Cart", b =>
                 {
                     b.HasOne("ClassLibrary.Models.Data.Product", "Product")
@@ -884,19 +919,11 @@ namespace Store.Migrations
 
             modelBuilder.Entity("ClassLibrary.Models.Data.Order", b =>
                 {
-                    b.HasOne("ClassLibrary.Models.Data.Address", "Address")
-                        .WithMany("Orders")
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("ClassLibrary.Models.Data.User", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Address");
 
                     b.Navigation("User");
                 });
@@ -962,6 +989,17 @@ namespace Store.Migrations
                     b.Navigation("Seller");
                 });
 
+            modelBuilder.Entity("ClassLibrary.Models.Data.ProductImage", b =>
+                {
+                    b.HasOne("ClassLibrary.Models.Data.Product", "Product")
+                        .WithMany("ProductImages")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("ClassLibrary.Models.Data.RefreshToken", b =>
                 {
                     b.HasOne("ClassLibrary.Models.Data.User", "User")
@@ -978,8 +1016,7 @@ namespace Store.Migrations
                     b.HasOne("ClassLibrary.Models.Data.Order", "Order")
                         .WithMany("Reviews")
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("ClassLibrary.Models.Data.Product", "Product")
                         .WithMany("Reviews")
@@ -1011,9 +1048,23 @@ namespace Store.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ClassLibrary.Models.Data.Address", b =>
+            modelBuilder.Entity("ClassLibrary.Models.Data.SellerRevenue", b =>
                 {
-                    b.Navigation("Orders");
+                    b.HasOne("ClassLibrary.Models.Data.Order", "Order")
+                        .WithMany("SellerRevenues")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ClassLibrary.Models.Data.Seller", "Seller")
+                        .WithMany("SellerRevenues")
+                        .HasForeignKey("SellerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Seller");
                 });
 
             modelBuilder.Entity("ClassLibrary.Models.Data.Category", b =>
@@ -1033,6 +1084,8 @@ namespace Store.Migrations
                     b.Navigation("Payment");
 
                     b.Navigation("Reviews");
+
+                    b.Navigation("SellerRevenues");
                 });
 
             modelBuilder.Entity("ClassLibrary.Models.Data.Product", b =>
@@ -1040,6 +1093,8 @@ namespace Store.Migrations
                     b.Navigation("Carts");
 
                     b.Navigation("OrderItems");
+
+                    b.Navigation("ProductImages");
 
                     b.Navigation("Reviews");
                 });
@@ -1051,12 +1106,12 @@ namespace Store.Migrations
                     b.Navigation("OrderItems");
 
                     b.Navigation("Products");
+
+                    b.Navigation("SellerRevenues");
                 });
 
             modelBuilder.Entity("ClassLibrary.Models.Data.User", b =>
                 {
-                    b.Navigation("Addresses");
-
                     b.Navigation("Carts");
 
                     b.Navigation("Orders");

@@ -3,16 +3,12 @@
   "WorkspaceRootPath": "D:\\CS66\\Project\\june-store\\store-api\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{785C3447-6349-491B-9472-1FC976BD6EA0}|Store\\Store.csproj|d:\\cs66\\project\\june-store\\store-api\\store\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{785C3447-6349-491B-9472-1FC976BD6EA0}|Store\\Store.csproj|solutionrelative:store\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{785C3447-6349-491B-9472-1FC976BD6EA0}|Store\\Store.csproj|d:\\cs66\\project\\june-store\\store-api\\store\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{785C3447-6349-491B-9472-1FC976BD6EA0}|Store\\Store.csproj|solutionrelative:store\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{AD1994A9-6656-43BF-A81C-DBF02D9A0A80}|ClassLibrary\\ClassLibrary.csproj|d:\\cs66\\project\\june-store\\store-api\\classlibrary\\models\\data\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{AD1994A9-6656-43BF-A81C-DBF02D9A0A80}|ClassLibrary\\ClassLibrary.csproj|solutionrelative:classlibrary\\models\\data\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{AD1994A9-6656-43BF-A81C-DBF02D9A0A80}|ClassLibrary\\ClassLibrary.csproj|d:\\cs66\\project\\june-store\\store-api\\classlibrary\\models\\data\\appbanner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AD1994A9-6656-43BF-A81C-DBF02D9A0A80}|ClassLibrary\\ClassLibrary.csproj|solutionrelative:classlibrary\\models\\data\\appbanner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,7 +18,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
@@ -38,19 +34,6 @@
               "IsPinned": true
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "AppBanner.cs",
-              "DocumentMoniker": "D:\\CS66\\Project\\june-store\\store-api\\ClassLibrary\\Models\\Data\\AppBanner.cs",
-              "RelativeDocumentMoniker": "ClassLibrary\\Models\\Data\\AppBanner.cs",
-              "ToolTip": "D:\\CS66\\Project\\june-store\\store-api\\ClassLibrary\\Models\\Data\\AppBanner.cs",
-              "RelativeToolTip": "ClassLibrary\\Models\\Data\\AppBanner.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAeAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-31T04:54:41.682Z",
-              "IsPinned": true
-            },
-            {
               "$type": "Bookmark",
               "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
             },
@@ -61,14 +44,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "D:\\CS66\\Project\\june-store\\store-api\\Store\\appsettings.json",
-              "RelativeDocumentMoniker": "Store\\appsettings.json",
-              "ToolTip": "D:\\CS66\\Project\\june-store\\store-api\\Store\\appsettings.json",
-              "RelativeToolTip": "Store\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAgAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-10-31T08:43:52.625Z",
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "D:\\CS66\\Project\\june-store\\store-api\\Store\\Data\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "Store\\Data\\ApplicationDbContext.cs",
+              "ToolTip": "D:\\CS66\\Project\\june-store\\store-api\\Store\\Data\\ApplicationDbContext.cs",
+              "RelativeToolTip": "Store\\Data\\ApplicationDbContext.cs",
+              "ViewState": "AgIAAPMAAAAAAAAAAAAiwPwAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T09:19:27.846Z",
               "EditorCaption": ""
             }
           ]

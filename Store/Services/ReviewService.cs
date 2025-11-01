@@ -30,22 +30,8 @@ public class ReviewService : Service<Review>, IServices.IReviewService
 
             var reviewDtos = _mapper.Map<List<ReviewDTO>>(reviews);
 
-            // Convert relative image URLs to absolute URLs
-            var baseUrl = _configuration["BaseUrl"] ?? "http://localhost:5279";
-            foreach (var review in reviewDtos)
-            {
-                if (!string.IsNullOrEmpty(review.UserImageUrl) && !review.UserImageUrl.StartsWith("http"))
-                {
-                    review.UserImageUrl = $"{baseUrl}{review.UserImageUrl}";
-                }
-            }
-
-            // Debug: Log review data
-            if (reviewDtos.Any())
-            {
-                Console.WriteLine($"DEBUG: First review UserImageUrl = {reviewDtos[0].UserImageUrl}");
-                Console.WriteLine($"DEBUG: First review UserName = {reviewDtos[0].UserName}");
-            }
+            // Note: Image URLs are kept as relative paths (e.g., "/uploads/users/image.jpg")
+            // The client will convert them to absolute URLs using convertImageUrl() helper
 
             // Calculate average rating
             var averageRating = reviews.Any() ? reviews.Average(r => r.Rating) : 0;

@@ -158,7 +158,6 @@ D:\CS66\Project\june-store\store-api\Store\obj\Debug\net9.0\staticwebassets.buil
 D:\CS66\Project\june-store\store-api\Store\obj\Debug\net9.0\staticwebassets.build.json.cache
 D:\CS66\Project\june-store\store-api\Store\obj\Debug\net9.0\staticwebassets.development.json
 D:\CS66\Project\june-store\store-api\Store\obj\Debug\net9.0\staticwebassets.build.endpoints.json
-D:\CS66\Project\june-store\store-api\Store\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 D:\CS66\Project\june-store\store-api\Store\obj\Debug\net9.0\Store.dll
 D:\CS66\Project\june-store\store-api\Store\obj\Debug\net9.0\refint\Store.dll
 D:\CS66\Project\june-store\store-api\Store\obj\Debug\net9.0\Store.pdb
@@ -172,3 +171,4 @@ D:\CS66\Project\june-store\store-api\Store\bin\Debug\net9.0\Store.pdb
 D:\CS66\Project\june-store\store-api\Store\obj\Debug\net9.0\Store.csproj.Up2Date
 D:\CS66\Project\june-store\store-api\Store\obj\Debug\net9.0\Store.genruntimeconfig.cache
 D:\CS66\Project\june-store\store-api\Store\obj\Debug\net9.0\ref\Store.dll
+D:\CS66\Project\june-store\store-api\Store\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

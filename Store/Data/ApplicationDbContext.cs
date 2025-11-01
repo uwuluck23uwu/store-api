@@ -31,8 +31,6 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<Cart> Carts { get; set; }
 
-    // Legacy Images table removed; use ProductImages instead
-
     public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
 
     public virtual DbSet<Otp> Otps { get; set; }
