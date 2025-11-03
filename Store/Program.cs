@@ -122,6 +122,7 @@ builder.Services.AddScoped<IReviewService, Store.Services.ReviewService>();
 builder.Services.AddScoped<ILocationService, Store.Services.LocationService>();
 builder.Services.AddScoped<IUserService, Store.Services.UserService>();
 builder.Services.AddScoped<IAppBannerService, Store.Services.AppBannerService>();
+builder.Services.AddScoped<ICultureService, Store.Services.CultureService>();
 
 var app = builder.Build();
 

@@ -43,6 +43,10 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<AppBanner> AppBanners { get; set; }
 
+    public virtual DbSet<Culture> Cultures { get; set; }
+
+    public virtual DbSet<CultureImage> CultureImages { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>(entity =>
@@ -369,6 +373,36 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.IsActive).HasDefaultValue(true);
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETDATE()");
             entity.Property(e => e.UpdatedAt).HasDefaultValueSql("GETDATE()");
+        });
+
+        modelBuilder.Entity<Culture>(entity =>
+        {
+            entity.HasKey(e => e.CultureId);
+
+            entity.Property(e => e.CultureName).IsRequired().HasMaxLength(200);
+            entity.Property(e => e.Description).HasMaxLength(2000);
+            entity.Property(e => e.ImageUrl).HasMaxLength(500);
+            entity.Property(e => e.Category).HasMaxLength(100);
+            entity.Property(e => e.IsActive).HasDefaultValue(true);
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETDATE()");
+            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("GETDATE()");
+        });
+
+        modelBuilder.Entity<CultureImage>(entity =>
+        {
+            entity.HasKey(e => e.CultureImageId);
+
+            entity.HasIndex(e => e.CultureId);
+
+            entity.Property(e => e.ImageUrl).IsRequired().HasMaxLength(500);
+            entity.Property(e => e.DisplayOrder).HasDefaultValue(0);
+            entity.Property(e => e.IsPrimary).HasDefaultValue(false);
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETDATE()");
+
+            entity.HasOne(d => d.Culture)
+                .WithMany(p => p.CultureImages)
+                .HasForeignKey(d => d.CultureId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -12,8 +12,8 @@ using Store.Data;
 namespace Store.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251101093904_SeedAdminUserAndSeller")]
-    partial class SeedAdminUserAndSeller
+    [Migration("20251103100718_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -148,6 +148,89 @@ namespace Store.Migrations
                     b.HasKey("CategoryId");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("ClassLibrary.Models.Data.Culture", b =>
+                {
+                    b.Property<int>("CultureId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CultureId"));
+
+                    b.Property<string>("Category")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<string>("CultureName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.HasKey("CultureId");
+
+                    b.ToTable("Cultures");
+                });
+
+            modelBuilder.Entity("ClassLibrary.Models.Data.CultureImage", b =>
+                {
+                    b.Property<int>("CultureImageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CultureImageId"));
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<int>("CultureId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DisplayOrder")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("IsPrimary")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.HasKey("CultureImageId");
+
+                    b.HasIndex("CultureId");
+
+                    b.ToTable("CultureImages");
                 });
 
             modelBuilder.Entity("ClassLibrary.Models.Data.Location", b =>
@@ -907,6 +990,17 @@ namespace Store.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("ClassLibrary.Models.Data.CultureImage", b =>
+                {
+                    b.HasOne("ClassLibrary.Models.Data.Culture", "Culture")
+                        .WithMany("CultureImages")
+                        .HasForeignKey("CultureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Culture");
+                });
+
             modelBuilder.Entity("ClassLibrary.Models.Data.Location", b =>
                 {
                     b.HasOne("ClassLibrary.Models.Data.Seller", "Seller")
@@ -1070,6 +1164,11 @@ namespace Store.Migrations
             modelBuilder.Entity("ClassLibrary.Models.Data.Category", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("ClassLibrary.Models.Data.Culture", b =>
+                {
+                    b.Navigation("CultureImages");
                 });
 
             modelBuilder.Entity("ClassLibrary.Models.Data.Location", b =>

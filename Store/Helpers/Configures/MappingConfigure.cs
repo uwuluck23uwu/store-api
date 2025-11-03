@@ -1,6 +1,7 @@
 using AutoMapper;
 using ClassLibrary.Models.Data;
 using ClassLibrary.Models.Dto;
+using ClassLibrary.Models.Dto.Cultures;
 
 namespace Store.Helpers.Configures;
 
@@ -56,6 +57,15 @@ public class MappingConfigure : Profile
         CreateMap<AppBannerCreateDTO, AppBanner>();
         CreateMap<AppBannerUpdateDTO, AppBanner>();
 
+        // Culture mappings
+        CreateMap<Culture, CultureDTO>()
+            .ForMember(dest => dest.CultureImages, opt => opt.MapFrom(src => src.CultureImages));
+        CreateMap<CultureCreateDTO, Culture>();
+        CreateMap<CultureUpdateDTO, Culture>();
+
+        // CultureImage mappings
+        CreateMap<CultureImage, CultureImageDTO>();
+
         // Cart mappings
         CreateMap<Cart, CartItemDTO>()
             .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.ProductName))
@@ -108,7 +118,6 @@ public class MappingConfigure : Profile
 
         // Payment mappings
         CreateMap<Payment, PaymentDTO>();
-        CreateMap<PaymentCreateDTO, Payment>();
 
         // Legacy Image mappings removed; use ProductImage instead
 

@@ -3,12 +3,8 @@
   "WorkspaceRootPath": "D:\\CS66\\Project\\june-store\\store-api\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{785C3447-6349-491B-9472-1FC976BD6EA0}|Store\\Store.csproj|d:\\cs66\\project\\june-store\\store-api\\store\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{785C3447-6349-491B-9472-1FC976BD6EA0}|Store\\Store.csproj|solutionrelative:store\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{AD1994A9-6656-43BF-A81C-DBF02D9A0A80}|ClassLibrary\\ClassLibrary.csproj|d:\\cs66\\project\\june-store\\store-api\\classlibrary\\models\\data\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AD1994A9-6656-43BF-A81C-DBF02D9A0A80}|ClassLibrary\\ClassLibrary.csproj|solutionrelative:classlibrary\\models\\data\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{785C3447-6349-491B-9472-1FC976BD6EA0}|Store\\Store.csproj|d:\\cs66\\project\\june-store\\store-api\\store\\controllers\\paymentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{785C3447-6349-491B-9472-1FC976BD6EA0}|Store\\Store.csproj|solutionrelative:store\\controllers\\paymentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,21 +14,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 2,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "User.cs",
-              "DocumentMoniker": "D:\\CS66\\Project\\june-store\\store-api\\ClassLibrary\\Models\\Data\\User.cs",
-              "RelativeDocumentMoniker": "ClassLibrary\\Models\\Data\\User.cs",
-              "ToolTip": "D:\\CS66\\Project\\june-store\\store-api\\ClassLibrary\\Models\\Data\\User.cs",
-              "RelativeToolTip": "ClassLibrary\\Models\\Data\\User.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAjAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-27T07:47:21.013Z",
-              "IsPinned": true
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
@@ -44,14 +27,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "ApplicationDbContext.cs",
-              "DocumentMoniker": "D:\\CS66\\Project\\june-store\\store-api\\Store\\Data\\ApplicationDbContext.cs",
-              "RelativeDocumentMoniker": "Store\\Data\\ApplicationDbContext.cs",
-              "ToolTip": "D:\\CS66\\Project\\june-store\\store-api\\Store\\Data\\ApplicationDbContext.cs",
-              "RelativeToolTip": "Store\\Data\\ApplicationDbContext.cs",
-              "ViewState": "AgIAAPMAAAAAAAAAAAAiwPwAAAAzAAAAAAAAAA==",
+              "Title": "PaymentController.cs",
+              "DocumentMoniker": "D:\\CS66\\Project\\june-store\\store-api\\Store\\Controllers\\PaymentController.cs",
+              "RelativeDocumentMoniker": "Store\\Controllers\\PaymentController.cs",
+              "ToolTip": "D:\\CS66\\Project\\june-store\\store-api\\Store\\Controllers\\PaymentController.cs",
+              "RelativeToolTip": "Store\\Controllers\\PaymentController.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAmwBIAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-01T09:19:27.846Z",
+              "WhenOpened": "2025-11-03T09:38:02.828Z",
               "EditorCaption": ""
             }
           ]

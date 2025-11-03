@@ -16,7 +16,6 @@ namespace Store.Controllers
         [HttpGet("qrcode")]
         public IActionResult GetQrCode(double amount)
         {
-            // TODO: Move PromptPay ID to a secure configuration
             string promptPayId = "0610816643";
 
             if (amount <= 0)

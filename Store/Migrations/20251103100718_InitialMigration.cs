@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Store.Migrations
 {
     /// <inheritdoc />
-    public partial class DB : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -46,6 +46,25 @@ namespace Store.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.CategoryId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Cultures",
+                columns: table => new
+                {
+                    CultureId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CultureName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
+                    ImageUrl = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    Category = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true, defaultValueSql: "GETDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true, defaultValueSql: "GETDATE()")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cultures", x => x.CultureId);
                 });
 
             migrationBuilder.CreateTable(
@@ -100,6 +119,29 @@ namespace Store.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.UserId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CultureImages",
+                columns: table => new
+                {
+                    CultureImageId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CultureId = table.Column<int>(type: "int", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    DisplayOrder = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    IsPrimary = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true, defaultValueSql: "GETDATE()")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CultureImages", x => x.CultureImageId);
+                    table.ForeignKey(
+                        name: "FK_CultureImages_Cultures_CultureId",
+                        column: x => x.CultureId,
+                        principalTable: "Cultures",
+                        principalColumn: "CultureId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -465,6 +507,11 @@ namespace Store.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_CultureImages_CultureId",
+                table: "CultureImages",
+                column: "CultureId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Locations_LocationId",
                 table: "Locations",
                 column: "LocationId",
@@ -568,16 +615,72 @@ namespace Store.Migrations
                 table: "Sellers",
                 column: "UserId",
                 unique: true);
+
+            // Seed Admin User
+            migrationBuilder.Sql(@"
+                INSERT INTO Users (Name, Email, Phone, PhoneNumber, PasswordHash, Role, FirstName, LastName, IsActive, CreatedAt, UpdatedAt, ImageUrl, Password)
+                VALUES (
+                    N'admin app',
+                    N'admin@gmail.com',
+                    '0610000000',
+                    '0610000000',
+                    N'$2a$11$VREWqxqwPAO.gjVri2Y9UegeJIylP18GCKolHZYEjDsrhI/sDgR22',
+                    N'Admin',
+                    N'admin',
+                    N'app',
+                    1,
+                    GETDATE(),
+                    GETDATE(),
+                    NULL,
+                    NULL
+                )
+            ");
+
+            // Seed Seller for Admin User
+            migrationBuilder.Sql(@"
+                INSERT INTO Sellers (UserId, ShopName, ShopDescription, ShopImageUrl, LogoUrl, Description, PhoneNumber, Address, Rating, TotalSales, IsVerified, IsActive, CreatedAt, UpdatedAt, QrCodeUrl)
+                SELECT
+                    UserId,
+                    N'ร้านของ admin',
+                    N'ร้านค้าของผู้ดูแลระบบ',
+                    NULL,
+                    NULL,
+                    N'ร้านค้าของผู้ดูแลระบบ',
+                    '0610000000',
+                    NULL,
+                    0.00,
+                    0,
+                    1,
+                    1,
+                    GETDATE(),
+                    GETDATE(),
+                    NULL
+                FROM Users
+                WHERE Email = N'admin@gmail.com'
+            ");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            // Delete seed data first (due to foreign key constraints)
+            migrationBuilder.Sql(@"
+                DELETE FROM Sellers
+                WHERE UserId IN (SELECT UserId FROM Users WHERE Email = N'admin@gmail.com')
+            ");
+
+            migrationBuilder.Sql(@"
+                DELETE FROM Users WHERE Email = N'admin@gmail.com'
+            ");
+
             migrationBuilder.DropTable(
                 name: "AppBanners");
 
             migrationBuilder.DropTable(
                 name: "Carts");
+
+            migrationBuilder.DropTable(
+                name: "CultureImages");
 
             migrationBuilder.DropTable(
                 name: "OrderItems");
@@ -599,6 +702,9 @@ namespace Store.Migrations
 
             migrationBuilder.DropTable(
                 name: "SellerRevenues");
+
+            migrationBuilder.DropTable(
+                name: "Cultures");
 
             migrationBuilder.DropTable(
                 name: "Products");
