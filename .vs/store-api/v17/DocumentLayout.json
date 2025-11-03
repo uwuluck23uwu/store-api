@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "D:\\CS66\\Project\\june-store\\store-api\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{785C3447-6349-491B-9472-1FC976BD6EA0}|Store\\Store.csproj|d:\\cs66\\project\\june-store\\store-api\\store\\migrations\\20251103100718_initialmigration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{785C3447-6349-491B-9472-1FC976BD6EA0}|Store\\Store.csproj|solutionrelative:store\\migrations\\20251103100718_initialmigration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{785C3447-6349-491B-9472-1FC976BD6EA0}|Store\\Store.csproj|d:\\cs66\\project\\june-store\\store-api\\store\\controllers\\paymentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{785C3447-6349-491B-9472-1FC976BD6EA0}|Store\\Store.csproj|solutionrelative:store\\controllers\\paymentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
@@ -27,6 +31,19 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "20251103100718_InitialMigration.cs",
+              "DocumentMoniker": "D:\\CS66\\Project\\june-store\\store-api\\Store\\Migrations\\20251103100718_InitialMigration.cs",
+              "RelativeDocumentMoniker": "Store\\Migrations\\20251103100718_InitialMigration.cs",
+              "ToolTip": "D:\\CS66\\Project\\june-store\\store-api\\Store\\Migrations\\20251103100718_InitialMigration.cs",
+              "RelativeToolTip": "Store\\Migrations\\20251103100718_InitialMigration.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T10:54:49.423Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "PaymentController.cs",
               "DocumentMoniker": "D:\\CS66\\Project\\june-store\\store-api\\Store\\Controllers\\PaymentController.cs",
               "RelativeDocumentMoniker": "Store\\Controllers\\PaymentController.cs",
