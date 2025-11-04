@@ -10,6 +10,12 @@ using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configure Kestrel to allow larger request body (50MB)
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.Limits.MaxRequestBodySize = 52428800; // 50 MB
+});
+
 // Settings
 var key = builder.Configuration.GetValue<string>("Settings:SecretProgram");
 builder.Configuration["ApiKey"] = key; // Make ApiKey available for services
@@ -21,6 +27,14 @@ builder.Services.AddControllers().AddJsonOptions(opt =>
     opt.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
     opt.JsonSerializerOptions.WriteIndented = true;
     opt.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+});
+
+// Configure form options to allow larger file uploads (50MB)
+builder.Services.Configure<Microsoft.AspNetCore.Http.Features.FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 52428800; // 50 MB
+    options.ValueLengthLimit = 52428800;
+    options.MemoryBufferThreshold = Int32.MaxValue;
 });
 
 // CORS

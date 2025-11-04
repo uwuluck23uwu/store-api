@@ -1,4 +1,3 @@
-
 using Microsoft.AspNetCore.Mvc;
 using QRCoder;
 using System;
