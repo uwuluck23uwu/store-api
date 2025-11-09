@@ -3,6 +3,14 @@
   "WorkspaceRootPath": "D:\\CS66\\Project\\june-store\\store-api\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{AD1994A9-6656-43BF-A81C-DBF02D9A0A80}|ClassLibrary\\ClassLibrary.csproj|d:\\cs66\\project\\june-store\\store-api\\classlibrary\\models\\data\\culture.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AD1994A9-6656-43BF-A81C-DBF02D9A0A80}|ClassLibrary\\ClassLibrary.csproj|solutionrelative:classlibrary\\models\\data\\culture.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{785C3447-6349-491B-9472-1FC976BD6EA0}|Store\\Store.csproj|d:\\cs66\\project\\june-store\\store-api\\store\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{785C3447-6349-491B-9472-1FC976BD6EA0}|Store\\Store.csproj|solutionrelative:store\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{785C3447-6349-491B-9472-1FC976BD6EA0}|Store\\Store.csproj|d:\\cs66\\project\\june-store\\store-api\\store\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{785C3447-6349-491B-9472-1FC976BD6EA0}|Store\\Store.csproj|solutionrelative:store\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
@@ -27,15 +35,39 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "Culture.cs",
+              "DocumentMoniker": "D:\\CS66\\Project\\june-store\\store-api\\ClassLibrary\\Models\\Data\\Culture.cs",
+              "RelativeDocumentMoniker": "ClassLibrary\\Models\\Data\\Culture.cs",
+              "ToolTip": "D:\\CS66\\Project\\june-store\\store-api\\ClassLibrary\\Models\\Data\\Culture.cs",
+              "RelativeToolTip": "ClassLibrary\\Models\\Data\\Culture.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-06T08:53:19.898Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "D:\\CS66\\Project\\june-store\\store-api\\Store\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "Store\\Properties\\launchSettings.json",
+              "ToolTip": "D:\\CS66\\Project\\june-store\\store-api\\Store\\Properties\\launchSettings.json",
+              "RelativeToolTip": "Store\\Properties\\launchSettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAABFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-11-06T08:15:47.87Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "appsettings.json",
               "DocumentMoniker": "D:\\CS66\\Project\\june-store\\store-api\\Store\\appsettings.json",
               "RelativeDocumentMoniker": "Store\\appsettings.json",
               "ToolTip": "D:\\CS66\\Project\\june-store\\store-api\\Store\\appsettings.json",
               "RelativeToolTip": "Store\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAEAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-11-04T07:43:01.169Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-04T07:43:01.169Z"
             }
           ]
         }
